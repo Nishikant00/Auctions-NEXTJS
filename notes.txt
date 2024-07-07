@@ -8,3 +8,4 @@ localhost stuff
 DATABASE_URL="postgresql://postgres:passkey@localhost:5432/postgres"
 NODE_ENV=development
 now make scripts for the db:push and db:studio
+shadcn made an app folder outside the main src directory what a dumb thing
