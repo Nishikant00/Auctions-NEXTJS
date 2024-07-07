@@ -1,1 +1,10 @@
 Created the next app for auctions
+Docker Compose File with postgres image and ran the containeer using docker compose up
+drizzle index.ts caching configuration
+@t3/oss/env-nextjs environment config with zod
+actual .env file 
+drizzle.config.ts file
+localhost stuff
+DATABASE_URL="postgresql://postgres:passkey@localhost:5432/postgres"
+NODE_ENV=development
+now make scripts for the db:push and db:studio
