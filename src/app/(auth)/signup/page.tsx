@@ -1,5 +1,8 @@
-import {signup} from './actions'
+import { signup } from "./actions";
+
+
 export default async function Page() {
+
 	return (
 		<>
 			<h1>Create an account</h1>

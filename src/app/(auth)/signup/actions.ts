@@ -19,17 +19,18 @@ export async function signup(formData: FormData): Promise<ActionResult> {
 		username.length > 31 ||
 		!/^[a-z0-9_-]+$/.test(username)
 	) {
+		console.log('error1')
 		return {
 			error: "Invalid username"
 		};
 	}
 	const password = formData.get("password");
 	if (typeof password !== "string" || password.length < 6 || password.length > 255) {
+		console.log('error2')
 		return {
 			error: "Invalid password"
 		};
 	}
-	console.log(username)
 	const passwordHash = await hash(password, {
 		// recommended minimum parameters
 		memoryCost: 19456,
@@ -45,7 +46,6 @@ export async function signup(formData: FormData): Promise<ActionResult> {
 		username: username,
 		password_hash: passwordHash
 	});
-	console.log(username)
 	const session = await lucia.createSession(userId, {});
 	const sessionCookie = lucia.createSessionCookie(session.id);
 	cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);

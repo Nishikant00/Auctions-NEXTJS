@@ -3,8 +3,8 @@ import { Input } from '@/components/ui/input';
 import {database} from '@/db/index'
 import { auctions } from '@/db/schema';
 import { validateRequest } from './(auth)/validate-request';
-import { Link } from 'lucide-react';
 import { logout } from './(auth)/logout';
+import Link from 'next/link';
 export default async function Home() {
   const {user}=await validateRequest()
   
@@ -25,9 +25,9 @@ export default async function Home() {
           ))
         }
       </ul>
-      {user && <form action={logout}><button>logout</button></form>}
-      {!user && <Link href='/signup'>signup</Link>}
-      {!user && <Link href='/login'>login</Link>}
+      {user && <form action={logout}><Button>logout</Button></form>}
+      {!user && <Link href='/signup'><Button>signup</Button></Link>}
+      {!user && <Link href='/login'><Button>login</Button></Link>}
     </main>
   );
 }
