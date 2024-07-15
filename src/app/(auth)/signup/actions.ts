@@ -8,8 +8,11 @@ import { generateIdFromEntropySize } from "lucia";
 import { ActionResult } from "next/dist/server/app-render/types";
 import { userTable } from "@/db/schema";
 
-
-export async function signup(formData: FormData): Promise<ActionResult> {
+export type formState={
+	message:string,
+	error:boolean,
+}
+export async function signup(prevState:formState,formData: FormData): Promise<ActionResult> {
 	const username = formData.get("username");
 	// username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
 	// keep in mind some database (e.g. mysql) are case insensitive
@@ -21,14 +24,16 @@ export async function signup(formData: FormData): Promise<ActionResult> {
 	) {
 		console.log('error1')
 		return {
-			error: "Invalid username"
+			message:"Invalid username",
+			error: false
 		};
 	}
 	const password = formData.get("password");
 	if (typeof password !== "string" || password.length < 6 || password.length > 255) {
 		console.log('error2')
 		return {
-			error: "Invalid password"
+			message:"Invalid password",
+			error: false
 		};
 	}
 	const passwordHash = await hash(password, {
