@@ -1,25 +1,35 @@
 "use client"
 import { useFormState, useFormStatus } from "react-dom";
 import { signup } from "./actions";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useEffect, useRef } from "react";
+import { redirect } from "next/navigation";
+
 export default function Page() {
+	const formRef=useRef(null)
 	const [state,action]=useFormState(signup,{
 		message:"",
-		error:true,
+		error:false,
+		errorPass:false
 	})
-	const formStatus=useFormStatus()
+	useEffect(()=>{
+		if (state.message=="success"){
+			return redirect('/')
+		}
+	},[state])
 	return (
 		<>
-			<h1>Create an account</h1>
-			<form action={action}>
-				<label htmlFor="username">Username</label>
-				<input name="username" id="username" />
-				{state.error ?<span></span> :<span>{state.message}</span>}
-				<br />
-				<label htmlFor="password">Password</label>
-				<input type="password" name="password" id="password" />
-				<br />
-				{formStatus.pending ? <button>Loading</button> :<button>Continue</button>}
+			<div className="grid content-center h-screen p-2">
+			<form action={action} className="flex flex-col gap-4 mx-auto">
+			<h1 className="text-center">Create an account</h1>
+			<Input type="text" name="username" placeholder="username"></Input>
+			{state.error&&<span className='text-red-700'>{state.message}</span>}
+			<Input type="Password" name="password" placeholder="password"></Input>
+			{state.errorPass &&<span className='text-red-700'>{state.message}</span>}
+			<Button className="w-20 " type="submit">Submit</Button>
 			</form>
+			</div>
 		</>
 	);
 }

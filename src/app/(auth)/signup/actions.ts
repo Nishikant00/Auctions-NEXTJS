@@ -11,11 +11,13 @@ import { userTable } from "@/db/schema";
 export type formState={
 	message:string,
 	error:boolean,
+	errorPass:boolean
 }
 export async function signup(prevState:formState,formData: FormData): Promise<ActionResult> {
-	const username = formData.get("username");
+	const username = formData.get("username") ;
 	// username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
 	// keep in mind some database (e.g. mysql) are case insensitive
+	console.log(username)
 	if (
 		typeof username !== "string" ||
 		username.length < 3 ||
@@ -25,7 +27,8 @@ export async function signup(prevState:formState,formData: FormData): Promise<Ac
 		console.log('error1')
 		return {
 			message:"Invalid username",
-			error: false
+			error: true,
+			errorPass:false
 		};
 	}
 	const password = formData.get("password");
@@ -33,7 +36,8 @@ export async function signup(prevState:formState,formData: FormData): Promise<Ac
 		console.log('error2')
 		return {
 			message:"Invalid password",
-			error: false
+			error:false,
+			errorPass:true
 		};
 	}
 	const passwordHash = await hash(password, {
@@ -54,5 +58,9 @@ export async function signup(prevState:formState,formData: FormData): Promise<Ac
 	const session = await lucia.createSession(userId, {});
 	const sessionCookie = lucia.createSessionCookie(session.id);
 	cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-	return redirect("/");
+	return{
+			message:"success",
+			error:false
+		}
+
 }
