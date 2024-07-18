@@ -1,27 +1,32 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {database} from '@/db/index'
-import { auctions } from '@/db/schema';
+import { auctions, bidItems } from '@/db/schema';
 import { validateRequest } from './(auth)/validate-request';
 import { logout } from './(auth)/logout';
 import Link from 'next/link';
+import { revalidatePath } from 'next/cache';
 export default async function Home() {
   const {user}=await validateRequest()
+  const items=await database.query.bidItems.findMany()
+  if (!user) return null;
+  if (!user.username) return null;
   
-  const bids=await database.query.auctions.findMany()
   return (
     <main className="container mx-auto py-8">
-      <form action={async()=>{
+      {user?.username}
+      <form action={async(formData:FormData)=>{
         'use server'
-        await database.insert(auctions).values({})
+        await database.insert(bidItems).values({name: formData.get('name') as string, userId:user.id})
+        revalidatePath('/')
       }}>
-        <Input type="text" placeholder='Place The Bid'/>
-        <Button >Place Bid</Button>
+        <Input type="text" name="name" placeholder='Post Item'/>
+        <Button >Set price</Button>
       </form>
       <ul>
         {
-          bids.map((bid)=>(
-            <li key={bid.id}>{bid.id}</li>
+          items.map((item)=>(
+            <li key={item.id}>{item.id}</li>
           ))
         }
       </ul>

@@ -1,3 +1,4 @@
+"use server";
 import { verify } from "@node-rs/argon2";
 import { cookies } from "next/headers";
 import { lucia } from "@/db";
@@ -10,7 +11,6 @@ import { eq } from "drizzle-orm";
 
 
 export async function login(formData: FormData): Promise<ActionResult> {
-	"use server";
 	const username = formData.get("username");
 	if (
 		typeof username !== "string" ||

@@ -17,7 +17,6 @@ export async function signup(prevState:formState,formData: FormData): Promise<Ac
 	const username = formData.get("username") ;
 	// username must be between 4 ~ 31 characters, and only consists of lowercase letters, 0-9, -, and _
 	// keep in mind some database (e.g. mysql) are case insensitive
-	console.log(username)
 	if (
 		typeof username !== "string" ||
 		username.length < 3 ||
