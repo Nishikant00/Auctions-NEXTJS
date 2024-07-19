@@ -8,9 +8,13 @@ import { ActionResult } from "next/dist/server/app-render/types";
 import { userTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
+export type formState={
+	message:string,
+	error:boolean,
+	errorPass:boolean
+}
 
-
-export async function login(formData: FormData): Promise<ActionResult> {
+export async function login(prevData:formState,formData: FormData): Promise<ActionResult> {
 	const username = formData.get("username");
 	if (
 		typeof username !== "string" ||
@@ -19,13 +23,17 @@ export async function login(formData: FormData): Promise<ActionResult> {
 		!/^[a-z0-9_-]+$/.test(username)
 	) {
 		return {
-			error: "Invalid username"
+			message:"Invalid username",
+			error: true,
+			errorPass:false
 		};
 	}
 	const password = formData.get("password");
 	if (typeof password !== "string" || password.length < 6 || password.length > 255) {
 		return {
-			error: "Invalid password"
+			message:"Invalid password",
+			error: false,
+			errorPass:true
 		};
 	}
 
@@ -62,5 +70,9 @@ export async function login(formData: FormData): Promise<ActionResult> {
 	const session = await lucia.createSession(existingUser.id, {});
 	const sessionCookie = lucia.createSessionCookie(session.id);
 	cookies().set(sessionCookie.name, sessionCookie.value, sessionCookie.attributes);
-	return redirect("/");
+	return {
+		message:"success",
+		error: false,
+		errorPass:false
+	};;
 }
