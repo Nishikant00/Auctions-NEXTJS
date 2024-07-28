@@ -9,17 +9,22 @@ export default function PostForm() {
             <form className='flex flex-col space-y-4 border p-8 max-w-[750px]' onSubmit={
          async (e) =>
         {
+          e.preventDefault()
           const form=e.currentTarget as HTMLFormElement
           const formData=new FormData(form)
           
           const file=formData.get('file') as File
+          const name=formData.get('name') as string
           const { data, error } = await supabase.storage.from('auction-images').upload(`${file.name}`, file)
           if (error) {
             console.log(file.name,error)
           } else {
             console.log('success')
           }
-          await PostItem(formData)
+          const fileName=file.name
+          const startPrice=formData.get('startPrice') as string
+          const cents=Math.floor(parseInt(startPrice)*100) 
+          await PostItem({name,startingPrice:cents,fileName:fileName})
         }
         }>
         <Input type="text" name="name" placeholder='Post Item' required/>

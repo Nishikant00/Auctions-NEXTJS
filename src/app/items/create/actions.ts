@@ -4,9 +4,8 @@ import {database} from '@/db/index'
 import { bidItems } from '@/db/schema';
 import { redirect } from 'next/navigation';
 
-export const PostItem = async (formData:FormData)=>{
-    const fileName = formData.get('file') as File
-    console.log(fileName.name)
+export const PostItem = async ({name,startingPrice,fileName}:{name:string,startingPrice:number,fileName:string})=>{
+    
     const {user}=await validateRequest()
 
     if (!user || !user.id) {
@@ -14,14 +13,14 @@ export const PostItem = async (formData:FormData)=>{
     }
         
     if (!user.username) return null;
-    const startPrice=formData.get('startPrice') as string
-    const cents=Math.floor(parseFloat(startPrice)*100) 
+    
     await database.insert(bidItems).values(
         {
-        name: formData.get('name') as string, 
+        name: name,
         userId:user.id, 
-        startPrice:cents,
-
+        startPrice:startingPrice,
+        fileName:fileName
      })
+
     redirect('/')
 }

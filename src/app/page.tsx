@@ -1,24 +1,30 @@
 import {database} from '@/db/index'
 import { validateRequest } from './(auth)/validate-request';
+import Image  from 'next/image';
+import { supabase } from '@/lib/sup';
+import { ItemCard } from '@/components/component/ItemCard';
 
+export const getURLImg =(fileName:string):string=> {
+  const { data } = supabase.storage.from('auction-images').getPublicUrl(fileName)
+  return data.publicUrl
+}
 export default async function Home() {
   const {user}=await validateRequest()
   if (!user) return null;
   if (!user.username) return null;
   const items=await database.query.bidItems.findMany()
   
+
   return (
     <main className="container mx-auto py-8 space-y-4">
 
-      <ul className='grid grid-cols-4'>
+      <div className='grid grid-cols-4'>
         {
           items.map((item)=>(
-            <li className=" border p-4 items-center mr-4 mb-4" key={item.id}>
-              {item.name} 
-              Starting price: ${item.startPrice/100}</li>
+            <ItemCard key={item.id} item={item}/>
           ))
         }
-      </ul>
+      </div>
      
     </main>
   );
