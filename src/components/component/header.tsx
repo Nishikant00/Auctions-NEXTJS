@@ -13,6 +13,7 @@ export default async function Header() {
       <Link href="/"><Image width="50" height="50" src="auction.svg" alt="logo"/></Link>
         <div className='flex gap-5 content-center items-center'>
       <Link href="/items/create" className='px-8 hover:underline'>Post Item</Link>
+      <Link href="/auctions" className='px-8 hover:underline'>My Items</Link>
       {user?.username}
       {user && <form action={logout}><Button>logout</Button></form>}
       {!user && <Link href='/signup'><Button>signup</Button></Link>}
