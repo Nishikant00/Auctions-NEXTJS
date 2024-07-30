@@ -3,8 +3,6 @@ import { validateRequest } from './(auth)/validate-request';
 import Image  from 'next/image';
 import { supabase } from '@/lib/sup';
 import { ItemCard } from '@/components/component/ItemCard';
-import { bidItems } from '@/db/schema';
-import { eq } from 'drizzle-orm';
 
 export const getURLImg =(fileName:string):string=> {
   const { data } = supabase.storage.from('auction-images').getPublicUrl(fileName)
@@ -14,9 +12,7 @@ export default async function Home() {
   const {user}=await validateRequest()
   if (!user) return null;
   if (!user.username) return null;
-  const items=await database.query.bidItems.findMany({
-    where: eq(bidItems.userId,user.id)
-  })
+  const items=await database.query.bidItems.findMany()
   
 
   return (

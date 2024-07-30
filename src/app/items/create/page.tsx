@@ -9,7 +9,7 @@ export default async function CreateItems() {
   
   return (
     <main className="container mx-auto py-8 space-y-4">
-      <h1 className='font-bold text-4xl'>Post an Item</h1>
+      <h1 className='font-bold text-4xl'>POST AN ITEM FOR SALE</h1>
       <PostForm/>
     </main>
   );
