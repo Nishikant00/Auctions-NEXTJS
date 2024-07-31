@@ -21,7 +21,7 @@ export default async function Home() {
   return (
     <main className="container mx-auto py-8 space-y-4">
       <h1 className='text-4xl font-bold'>MY ITEMS</h1>
-      <div className='grid grid-cols-4'>
+      <div className='flex flex-wrap'>
         {
           items.map((item)=>(
             <ItemCard key={item.id} item={item}/>
