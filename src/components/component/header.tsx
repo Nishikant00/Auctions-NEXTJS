@@ -18,7 +18,7 @@ export default async function Header() {
         </div>
         <div className='flex gap-5 content-center items-center'>
       {user?.username}
-      {user && <form action={logout}><Button variant='ghost'>logout</Button></form>}
+      {user && <form action={logout}><Button >logout</Button></form>}
       {!user && <Link href='/signup'><Button>signup</Button></Link>}
       {!user && <Link href='/login'><Button>login</Button></Link>} 
         </div>

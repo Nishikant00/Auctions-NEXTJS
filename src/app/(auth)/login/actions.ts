@@ -7,6 +7,7 @@ import {database as db} from"@/db"
 import { ActionResult } from "next/dist/server/app-render/types";
 import { userTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { validateRequest } from "../validate-request";
 
 export type formState={
 	message:string,
@@ -15,6 +16,7 @@ export type formState={
 }
 
 export async function login(prevData:formState,formData: FormData): Promise<ActionResult> {
+
 	const username = formData.get("username");
 	if (
 		typeof username !== "string" ||

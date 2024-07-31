@@ -12,7 +12,7 @@ import {
 
 export const ItemCard = ({item}:{item:Item}) => {
   return (
-    <Card>
+    <Card className="m-2">
         <CardContent >
         <Image className="pt-2 mx-auto" src={getURLImg(item.fileName)} alt="Item image" height="200" width="200" />
         </CardContent>

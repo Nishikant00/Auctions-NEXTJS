@@ -4,22 +4,23 @@ import { supabase } from '@/lib/sup';
 import { ItemCard } from '@/components/component/ItemCard';
 import { bidItems } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-
+import { redirect } from 'next/navigation';
+import {Empty} from '@/components/component/empty-state'
 export const getURLImg =(fileName:string):string=> {
   const { data } = supabase.storage.from('auction-images').getPublicUrl(fileName)
   return data.publicUrl
 }
 export default async function Home() {
   const {user}=await validateRequest()
-  if (!user) return null;
-  if (!user.username) return null;
+  if (!user) return redirect('/login');
+  if (!user.username) return redirect('/login');
   const items=await database.query.bidItems.findMany({
     where: eq(bidItems.userId,user.id)
   })
-
+  const hasItems:boolean=items.length==0
   return (
     <main className="container mx-auto py-8 space-y-4">
-
+      <h1 className='text-4xl font-bold'>MY ITEMS</h1>
       <div className='grid grid-cols-4'>
         {
           items.map((item)=>(
@@ -27,7 +28,7 @@ export default async function Home() {
           ))
         }
       </div>
-     
+     {hasItems && <Empty></Empty>}
     </main>
   );
 }
