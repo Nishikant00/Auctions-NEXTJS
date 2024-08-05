@@ -25,7 +25,9 @@ export default function RootLayout({
           fontSans.variable
         )}>
         <Header/>
+        <div className="container">
         {children}
+        </div>
         </body>
     </html>
   );

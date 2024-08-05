@@ -4,9 +4,11 @@ import { bidItems } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import Image from 'next/image'
-export default function ItemDetails({params:itemid}:{params:number}) {
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+export default async function ItemDetails({params:{itemid}}:{params:{itemid:number}}) {
     const user=validateRequest()
-    const item=database.query.bidItems.findFirst({
+    const item= await database.query.bidItems.findFirst({
         where:eq(bidItems.id,itemid)
     })
     if(!user){
@@ -14,10 +16,16 @@ export default function ItemDetails({params:itemid}:{params:number}) {
     }
     if (!item){
         return(
-            <div className="container flex content-center items-center">
-            <Image src="notfound.svg" height='500' width="500" alt="logo"/> 
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Item not found</h1>
-            </div>
+            <main className="space-y-8 flex flex-col items-center">
+                <Image  src="/notfound.svg" height='300' width="300" alt="logo"/> 
+                <h1 className="scroll-m-20 font-extrabold tracking-tight text-5xl">Item not found</h1>
+                <p className="font-bold">Item is not available maybe try a different one</p>
+                <Button asChild>
+                    <Link href='/'>
+                    Go back
+                    </Link>
+                </Button>
+            </main>
         )
     }
     return (
