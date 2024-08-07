@@ -11,6 +11,7 @@ import {
     CardHeader,
     CardTitle,
   } from "@/components/ui/card"
+import { formatCurrency } from "@/app/items/[itemid]/page"
 
 export const ItemCard = ({item}:{item:Item}) => {
   return (
@@ -24,7 +25,7 @@ export const ItemCard = ({item}:{item:Item}) => {
             {item.name}
             </CardTitle>
             <CardDescription>
-            Starting price: ${item.startPrice/100}
+            Starting price: {formatCurrency(item.startPrice)}
             </CardDescription>
             <Button asChild><Link href={`/items/${item.id}`}>Place Bid</Link></Button>
         </CardHeader>

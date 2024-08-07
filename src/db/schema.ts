@@ -10,7 +10,9 @@ export const bidItems=pgTable("bidItems",{
 	userId:text("userId").notNull().references(()=>userTable.id,{onDelete:"cascade"}),
 	name:text("name").notNull(),
 	startPrice:integer("startPrice").notNull().default(0),
-	fileName:text("fileName").notNull()
+	fileName:text("fileName").notNull(),
+	bidInterval: integer('bidInterval').notNull().default(100)
+
 })
 export type Item=typeof bidItems.$inferSelect;
 export const userTable = pgTable("user", {
