@@ -1,10 +1,6 @@
 import { pgTable,serial, text, timestamp,integer} from "drizzle-orm/pg-core";
 
 
-export const auctions=pgTable('auctions',{
-    id: serial('id').primaryKey(),
-});
-
 export const bidItems=pgTable("bidItems",{
 	id:serial('id').primaryKey(),
 	userId:text("userId").notNull().references(()=>userTable.id,{onDelete:"cascade"}),
@@ -12,8 +8,16 @@ export const bidItems=pgTable("bidItems",{
 	startPrice:integer("startPrice").notNull().default(0),
 	fileName:text("fileName").notNull(),
 	bidInterval: integer('bidInterval').notNull().default(100)
-
+	
 })
+
+export const auctions=pgTable('auctions',{
+	id: serial('id').primaryKey(),
+	amount:integer('amount').notNull(),
+	itemId:serial('itemId').notNull().references(()=>bidItems.id,{onDelete:'cascade'}),
+	userId:text('userId').notNull().references(()=>userTable.id,{onDelete:'cascade'})
+
+});
 export type Item=typeof bidItems.$inferSelect;
 export const userTable = pgTable("user", {
 	id: text("id").primaryKey(),

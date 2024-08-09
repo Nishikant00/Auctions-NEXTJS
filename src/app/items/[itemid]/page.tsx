@@ -69,7 +69,7 @@ export default async function ItemDetails({params:{itemid}}:{params:{itemid:numb
             </h1>
             <Image className="border" src={getURLImg(item.fileName)} alt='item image' height='400' width='400'></Image>
             <p className="mt-4 text-2xl">Starting Price <span className="font-bold">{formatCurrency(item.startPrice)}</span></p>
-            <p className="mt-4 text-2xl">Bid Interval:  {formatCurrency(item.bidInterval)}</p>
+            <p className="mt-4 text-2xl">Bid Interval: <span className="font-bold">{formatCurrency(item.bidInterval)}</span></p>
             </div>
             <div className="space-y-4 flex-1">
                 <h2 className="font-bold text-3xl mt-4">Current Bids</h2>
