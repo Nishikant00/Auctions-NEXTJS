@@ -7,16 +7,16 @@ export const bidItems=pgTable("bidItems",{
 	name:text("name").notNull(),
 	startPrice:integer("startPrice").notNull().default(0),
 	fileName:text("fileName").notNull(),
-	bidInterval: integer('bidInterval').notNull().default(100)
-	
+	bidInterval: integer('bidInterval').notNull().default(100),
+	currentBid:integer('currentBid').notNull().default(0)
 })
 
 export const auctions=pgTable('auctions',{
 	id: serial('id').primaryKey(),
 	amount:integer('amount').notNull(),
 	itemId:serial('itemId').notNull().references(()=>bidItems.id,{onDelete:'cascade'}),
-	userId:text('userId').notNull().references(()=>userTable.id,{onDelete:'cascade'})
-
+	userId:text('userId').notNull().references(()=>userTable.id,{onDelete:'cascade'}),
+	timestamp:timestamp("timestamp",{mode:"date"}).notNull()
 });
 export type Item=typeof bidItems.$inferSelect;
 export const userTable = pgTable("user", {

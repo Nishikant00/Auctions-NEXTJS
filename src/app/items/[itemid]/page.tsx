@@ -1,13 +1,14 @@
 import { validateRequest } from "@/app/(auth)/validate-request";
 import {database} from '@/db/index'
-import { bidItems } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { auctions, bidItems } from "@/db/schema";
+import { desc, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import Image from 'next/image'
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { getURLImg } from "@/app/page"
 import {formatDistance} from 'date-fns'
+import { createBid } from "./actions";
 export const dateFunction=(date:Date)=>{
     return formatDistance(date, new Date(), { addSuffix: true })
 }
@@ -36,28 +37,10 @@ export default async function ItemDetails({params:{itemid}}:{params:{itemid:numb
             </main>
         )
     }
-    const bids=[
-        {
-            id:1,
-            amount:100,
-            userName:'Nishi',
-            datess:new Date()
-        },
-            
-        {
-            id:2,
-            amount:100,
-            userName:'Nishi',
-            datess:new Date()
-    
-        },
-        {
-            id:3,
-            amount:100,
-            userName:'Nishi',
-            datess:new Date()
-        }
-    ]
+    const bids=await database.query.auctions.findMany({
+        where:eq(bidItems.id,itemid),
+        orderBy:desc(auctions.id)
+    })
     const noBids:boolean=bids.length>0
 
     return (
@@ -85,11 +68,11 @@ export default async function ItemDetails({params:{itemid}}:{params:{itemid:numb
                                     ₹{bid.amount}
                                 </span>
                                 <span className="font-bold">
-                                    {bid.userName}
+                                    {bid.id}
                                 </span>
                                 </div>
                                 <div className="font-bold">
-                                    {dateFunction(bid.datess)}
+                                    {dateFunction(bid.timestamp)}
                                 </div>
                             </div>
                         </li>
@@ -101,7 +84,10 @@ export default async function ItemDetails({params:{itemid}}:{params:{itemid:numb
                 <div className="flex flex-col items-center gap-8 bg-gray-100 p-12 rounded-xl">
                     <Image src='/notfound.svg' alt='logo' width='100' height='100'/>
                     <h2 className="font-bold text-2xl">No Bids Yet</h2>
+                    <form action={createBid.bind(null,item.id)}>
+                    
                     <Button>Place a bid</Button>
+                    </form>
                 </div>
                 }
             </div>
