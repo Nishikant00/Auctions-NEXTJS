@@ -1,5 +1,7 @@
-import { pgTable,serial, text, timestamp,integer} from "drizzle-orm/pg-core";
 
+import { pgTable,serial, text, timestamp,integer} from "drizzle-orm/pg-core";
+import { relations} from "drizzle-orm/relations";
+ 
 
 export const bidItems=pgTable("bidItems",{
 	id:serial('id').primaryKey(),
@@ -35,3 +37,10 @@ export const sessionTable = pgTable("session", {
 		mode: "date"
 	}).notNull()
 });
+
+export const usersRelations= relations(auctions,({one})=>({
+	user: one(userTable,{
+		fields:[auctions.userId],
+		references:[userTable.id]
+	})
+}))

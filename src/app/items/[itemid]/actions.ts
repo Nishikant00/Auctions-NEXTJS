@@ -1,7 +1,9 @@
+"use server"
 import { validateRequest } from "@/app/(auth)/validate-request"
 import { database } from "@/db"
 import { eq } from "drizzle-orm"
 import { auctions, bidItems } from "@/db/schema"
+import { revalidatePath } from "next/cache"
 
 export const createBid = async (ItemId:number)=>{
     const {user}=await validateRequest()
@@ -15,6 +17,7 @@ export const createBid = async (ItemId:number)=>{
         throw new Error('Item not found')
     }
     const latestBid=items.currentBid+items.bidInterval
+    console.log(items)
     await database.insert(auctions).values({
         amount:latestBid,
         itemId:items.id,
@@ -22,4 +25,5 @@ export const createBid = async (ItemId:number)=>{
         timestamp:new Date()
     })
     await database.update(bidItems).set({currentBid:latestBid}).where(eq(bidItems.id,ItemId))
+    revalidatePath(`/items/${ItemId}`)
 }
