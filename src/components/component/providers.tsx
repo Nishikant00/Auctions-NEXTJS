@@ -1,5 +1,4 @@
 "use client"
-import { validateRequest } from "@/app/(auth)/validate-request";
 import { env } from "@/env";
 import {
     KnockFeedProvider,
@@ -13,13 +12,20 @@ export const Providers =  ({children}:{children:React.ReactNode}) => {
     const [userId, setUserId] = useState("");
     const [isVisible, setIsVisible] = useState(false);
     const notifButtonRef = useRef(null);
+
     useEffect(()=>{
         const fetchUser=async ()=>{
-            const {user}=await validateRequest()
-            if (!user){
+            const response=await fetch("/api/validate",{
+              headers:{
+                Accept:"application/json",
+                method:"GET",
+              },
+            })
+            const usersId:string=await response.json()
+            if (!usersId){
                 return <div>{children}</div>
             }
-            setUserId(user.id)
+            setUserId(usersId)
         }
         fetchUser()
     },[])
