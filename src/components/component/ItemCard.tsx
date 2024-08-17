@@ -18,7 +18,7 @@ export const ItemCard = ({item}:{item:Item}) => {
 
     <Card className="m-2 p-5 self-start">
         <CardContent >
-        <Image className="pt-2 mx-auto" src={getURLImg(item.fileName)} alt="Item image" height="200" width="200" />
+        <Image className="pt-2 mx-auto" src={getURLImg(item.fileName)} alt="Item image" height="200" width="200" loading="lazy" />
         </CardContent>
         <CardHeader>
             <CardTitle className="scroll-m-20 text-2xl font-semibold tracking-tight text-wrap">

@@ -4,7 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/component/header";
 import "@knocklabs/react/dist/index.css";
-import { Providers } from "@/components/component/providers";
+import { AppProviders } from "@/app/knock-providers";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -27,13 +27,12 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}>
+        <AppProviders>
         <Header/>
-        <Providers>
-
         <div className="container">
         {children}
         </div>
-        </Providers>
+        </AppProviders>
 
         </body>
     </html>

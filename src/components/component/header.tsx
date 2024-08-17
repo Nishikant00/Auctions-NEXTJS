@@ -1,8 +1,12 @@
-import { validateRequest } from '@/app/(auth)/validate-request';
+"use client"
 import { logout } from '../../app/(auth)/logout';
 import Link from 'next/link';
 import { Button } from '../ui/button';
 import Image  from 'next/image'; 
+import {
+  NotificationFeedPopover,
+  NotificationIconButton,
+} from "@knocklabs/react"
 import {
   Menubar,
   MenubarContent,
@@ -12,11 +16,29 @@ import {
   MenubarShortcut,
   MenubarTrigger,
 } from "@/components/ui/menubar"
+import { useEffect, useRef, useState } from 'react';
 
-export default async function Header() {
-    const {user}=await validateRequest()
-  if (!user) return null;
-  if (!user.username) return null;
+export default function Header() {
+  const [userName, setUserName]=useState("")
+  const [isVisible, setIsVisible] = useState(false);
+  const notifButtonRef = useRef(null);
+  useEffect(()=>{
+    const fetchUser=async ()=>{
+        const response=await fetch("/api/validate-name",{
+          headers:{
+            Accept:"application/json",
+            method:"GET",
+          },
+        })
+        const username:{name:string}=await response.json()
+        
+        setUserName(username.name)
+    }
+    fetchUser()
+},[])
+    if (!userName){
+      return null;
+    }
     return (
       <div>
         <div>
@@ -28,10 +50,23 @@ export default async function Header() {
         <Link href="/auctions" className='px-3 hover:text-gray-500'>MY AUCTIONS</Link>
         </div>
         <div className='flex gap-5 content-center items-center'>
-      {user?.username}
-      {user && <form action={logout}><Button >logout</Button></form>}
-      {!user && <Link href='/signup'><Button>signup</Button></Link>}
-      {!user && <Link href='/login'><Button>login</Button></Link>} 
+        
+        <div>
+
+        <NotificationIconButton
+              ref={notifButtonRef}
+              onClick={(e) => setIsVisible(!isVisible)}
+            />
+            <NotificationFeedPopover
+              buttonRef={notifButtonRef}
+              isVisible={isVisible}
+              onClose={() => setIsVisible(false)}
+              />
+        </div>
+      {userName}
+      {userName && <form action={logout}><Button >logout</Button></form>}
+      {!userName && <Link href='/signup'><Button>signup</Button></Link>}
+      {!userName && <Link href='/login'><Button>login</Button></Link>} 
         </div>
         <div className='md:hidden'>
         <Menubar>
@@ -39,7 +74,7 @@ export default async function Header() {
           <MenubarTrigger>↓</MenubarTrigger>
           <MenubarContent>
             <MenubarItem className='mx-3'>
-            {user?.username}
+            {userName}
 
             </MenubarItem>
             <MenubarItem><Link href="/" className='px-3 hover:text-gray-500'>SHOP</Link>
